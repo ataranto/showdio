@@ -1,4 +1,5 @@
 import jinja2
+import json
 import os
 import rdio
 import urllib2
@@ -59,11 +60,12 @@ class MainHandler(Handler):
         location = 26330
         songkick_api_url = 'http://api.songkick.com/api/3.0/metro_areas/%d/calendar.json?apikey=eRACBJEh2i3NOewK' % location
 
-        shows = urllib2.urlopen(songkick_api_url)
+        response = urllib2.urlopen(songkick_api_url)
+        shows = json.load(response).get('resultsPage').get('results').get('event')
 
         self.render('main.html', {
             'artists' : artists,
-            'shows' : shows.read(),
+            'shows' : shows,
         })
 
 class LoginHandler(Handler):

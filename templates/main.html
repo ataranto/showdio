@@ -6,8 +6,11 @@ Label
 
 {% block content %}
 Shows:
-  {{ shows }}
+  {% for show in shows %}
+    <p>{{ show['displayName'] }}</p>
+  {% endfor %}
 
+Artists:
   {% for artist in artists %}
     <p>{{ artist['name'] }}</p>
   {% endfor %}
