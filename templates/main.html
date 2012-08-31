@@ -5,5 +5,11 @@ Label
 {% endblock %}
 
 {% block content %}
-Hello, word! main
+Shows:
+  {{ shows }}
+
+  {% for artist in artists %}
+    <p>{{ artist['name'] }}</p>
+  {% endfor %}
+
 {% endblock %}

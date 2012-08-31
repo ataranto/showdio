@@ -1,7 +1,8 @@
 import jinja2
 import os
-import webapp2
 import rdio
+import urllib2
+import webapp2
 
 import secret
 
@@ -42,7 +43,6 @@ class Handler(webapp2.RequestHandler):
             self.response.delete_cookie(cookie)
 
     def render(self, template, values={}):
-        values['rdio_token'] = self.rdio.token
         values['user'] = self._get_user()
 
         template = Handler.jinja.get_template(template)
@@ -51,7 +51,20 @@ class Handler(webapp2.RequestHandler):
 
 class MainHandler(Handler):
     def get(self):
-        self.render('main.html')
+        artists = self.rdio.call("getArtistsInCollection", {
+            'count' : 100,
+        }).get('result')
+
+        # SF Bay Area, hardcoded
+        location = 26330
+        songkick_api_url = 'http://api.songkick.com/api/3.0/metro_areas/%d/calendar.json?apikey=eRACBJEh2i3NOewK' % location
+
+        shows = urllib2.urlopen(songkick_api_url)
+
+        self.render('main.html', {
+            'artists' : artists,
+            'shows' : shows.read(),
+        })
 
 class LoginHandler(Handler):
     def get(self):
