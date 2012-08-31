@@ -5,13 +5,7 @@ Showdio - Find out when your favorite bands play your town
 {% endblock %}
 
 {% block content %}
-Shows:
   {% for show in shows %}
     <p>{{ show['displayName'] }}</p>
-  {% endfor %}
-
-Artists:
-  {% for artist in artists %}
-    <p>{{ artist['name'] }}</p>
   {% endfor %}
 {% endblock %}

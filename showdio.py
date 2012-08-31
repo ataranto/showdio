@@ -52,16 +52,33 @@ class Handler(webapp2.RequestHandler):
 
 class MainHandler(Handler):
     def get(self):
-        artists = self.rdio.call("getArtistsInCollection", {
+        if self._get_user() is None:
+            self.render('main.html')
+            return
+            
+        rdio_artists = self.rdio.call("getArtistsInCollection", {
             'count' : 100,
         }).get('result')
+
+        artists = set()
+        map(lambda x: artists.add(x['name']), rdio_artists)
 
         # SF Bay Area, hardcoded
         location = 26330
         songkick_api_url = 'http://api.songkick.com/api/3.0/metro_areas/%d/calendar.json?apikey=eRACBJEh2i3NOewK' % location
 
         response = urllib2.urlopen(songkick_api_url)
-        shows = json.load(response).get('resultsPage').get('results').get('event')
+        all_shows = json.load(response). \
+            get('resultsPage'). \
+            get('results'). \
+            get('event')
+
+        shows = []
+        for show in all_shows:
+            for item in show['performance']:
+                if item['artist']['displayName'] in artists:
+                    shows.append(show)
+                    continue
 
         self.render('main.html', {
             'artists' : artists,
