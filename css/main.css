@@ -1,0 +1,19 @@
+body
+{
+
+}
+
+#top {
+
+}
+
+.album {
+    background : lightgrey;
+    border : 1px solid black;
+}
+
+.icon {
+    float : left;
+    height : 64;
+    width : 64;
+}
