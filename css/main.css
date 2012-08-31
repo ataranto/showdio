@@ -1,19 +1,7 @@
-body
-{
-
-}
-
-#top {
-
-}
-
-.album {
-    background : lightgrey;
-    border : 1px solid black;
-}
-
-.icon {
-    float : left;
-    height : 64;
-    width : 64;
-}
+body{background-color: #f9f9f9;font-family:"Helvetica Neue",Arial,Helvetica,sans-serif;padding:0;margin:0;color:#4b5c66;}
+a {color:008fd5;}
+#wrapper{width:1200px;margin: 15px auto;}
+#top {padding: 35px 45px; margin-bottom: 25px; background: rgba(0, 143, 213, .03);border-bottom: 1px solid 008fd5;text-shadow: 0px 0px 0px;}
+#userinfo{display: inline;float: right;}
+.album {background : lightgrey; border : 1px solid black;}
+.icon {height : 45; width : 45;}

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Label
+Showdio - Find out when your favorite bands play your town
 {% endblock %}
 
 {% block content %}
@@ -14,5 +14,4 @@ Artists:
   {% for artist in artists %}
     <p>{{ artist['name'] }}</p>
   {% endfor %}
-
 {% endblock %}

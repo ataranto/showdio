@@ -16,16 +16,19 @@
   </head>
   <body>
     <div id="top">
-      <a href="/">Home</a>
+      <a href="/"><img class="logo" src="img/showdio.png"></a>
+      <div id="userinfo">
       {% if user %}
-        <img src="{{ user['icon'] }}" /> {{ user['firstName'] }} |
+        <img class="icon" src="{{ user['icon'] }}" /> Hey, {{ user['firstName'] }}! |
         <a href="/logout">Sign Out</a>
       {% else %}
         <a href="/login">Sign In</a>
       {% endif %}
+      </div>
     </div>
+    <div id="wrapper">
     {% block content %}
     {% endblock %}
-    <hr>
+  	</div>
   </body>
 </html>
