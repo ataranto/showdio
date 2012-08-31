@@ -82,7 +82,9 @@ class MainHandler(Handler):
 
         self.render('main.html', {
             'artists' : artists,
-            'shows' : shows,
+            #'shows' : shows,
+            # temporary design hack, display all shows
+            'shows' : all_shows,
         })
 
 class LoginHandler(Handler):
