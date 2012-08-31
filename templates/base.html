@@ -8,6 +8,22 @@
     </title>
     <link>
        <link rel="stylesheet" href="/css/main.css" type="text/css" />
+       <script src="http://rdio.com/api/api.js?client_id=HaFppqX7mO61Lbth-M0h_g "></script>
+       <script>
+
+R.ready(function() {
+    console.log('_setAccessToken: {{ rdio_token[0] }}')
+    R._setAccessToken('{{ rdio_token[0] }}');
+
+    R.call("getPlayHistory", {
+        user: R.currentUser.get('key'),
+        count: 100
+    }, function(data) {
+        alert('done');
+    });
+});
+
+       </script>
        <!--
        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript"></script>
        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript"></script>
@@ -27,6 +43,5 @@
     {% block content %}
     {% endblock %}
     <hr>
-    {{ dump }}
   </body>
 </html>

@@ -42,6 +42,7 @@ class Handler(webapp2.RequestHandler):
             self.response.delete_cookie(cookie)
 
     def render(self, template, values={}):
+        values['rdio_token'] = self.rdio.token
         values['user'] = self._get_user()
 
         template = Handler.jinja.get_template(template)

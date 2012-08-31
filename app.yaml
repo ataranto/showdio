@@ -18,5 +18,9 @@ handlers:
 - url: /img
   static_dir: img
 
+- url: /(.*\.html)
+  static_files: static/\1
+  upload: static/(.*\.html)
+
 - url: /.*
   script: showdio.app
