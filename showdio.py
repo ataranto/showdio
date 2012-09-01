@@ -83,9 +83,7 @@ class MainHandler(Handler):
         for show in all_shows:
             for item in show['performance']:
                 artist = item['artist']['displayName']
-                #if artist in artists:
-                # XXX: hack, just show everything for now
-                if True:
+                if artist in artists:
                     show['headliner'] = artist
                     shows.append(show)
                     break
