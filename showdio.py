@@ -56,12 +56,16 @@ class MainHandler(Handler):
             self.render('main.html')
             return
             
-        rdio_artists = self.rdio.call("getArtistsInCollection", {
+        rdio_artists = self.rdio.call('getArtistsInCollection', {
             'count' : 100,
         }).get('result')
+        rdio_history = self.rdio.call('getPlayHistory', {
+            'user' : self._get_user()['key'],
+        })['result']
 
         artists = set()
         map(lambda x: artists.add(x['name']), rdio_artists)
+        map(lambda x: artists.add(x['artist']), rdio_history)
 
         # SF Bay Area, hardcoded
         location = 26330
@@ -81,7 +85,6 @@ class MainHandler(Handler):
                     continue
 
         self.render('main.html', {
-            'artists' : artists,
             #'shows' : shows,
             # temporary design hack, display all shows
             'shows' : all_shows,
