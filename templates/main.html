@@ -24,11 +24,11 @@ Showdio - Find out when your favorite bands play your town
       {% endfor %}
     </ul>
   </li>		
-  <li>
+  <li class="wide">
     <h2>Venue</h2>
-    <ul>
+    <ul class="wide">
       {% for show in shows %}
-        <li>{{ show['venue']['displayName'] }}</li>
+        <li class="wide">{{ show['venue']['displayName'] }}</li>
       {% endfor %}
     </ul>
   </li>		
