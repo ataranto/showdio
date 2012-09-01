@@ -1,3 +1,5 @@
+
+
 {% extends 'base.html' %}
 
 {% block title %}
@@ -8,4 +10,38 @@ Showdio - Find out when your favorite bands play your town
   {% for show in shows %}
     <p>{{ show['displayName'] }}</p>
   {% endfor %}
+
+
+<ul class="showinfo">
+<li>
+<h2>Date</h2>
+<ul>
+<li>09/03</li>
+<li>09/07</li>
+</ul>
+</li>
+<li>
+<h2>Artist</h2>
+<ul>
+<li>Beirut</li>
+<li>Thao & Mirah</li>
+</ul>
+</li>		
+<li>
+<h2>Venue</h2>
+<ul>
+<li>Fox Theater</li>
+<li>The Independent</li>
+</ul>
+</li>		
+<li class="last">
+<h2>Tickets</h2>
+<ul>
+<li>Buy Tickets</li>
+<li>Buy Tickets</li>
+</ul>
+</li>		
+</ul>
+
+
 {% endblock %}

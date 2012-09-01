@@ -5,3 +5,11 @@ a {color:008fd5;}
 #userinfo{display: inline;float: right;}
 .album {background : lightgrey; border : 1px solid black;}
 .icon {height : 45; width : 45;}
+
+.showinfo li{width: 198px; float: left; border-right: 1px dashed #b2b2b2; overflow: hidden;}
+.showinfo li.stat4{border-right:0px;}
+.showinfo li h2{display: block; background: #f1f4f4; border-bottom: 1px dashed #b2b2b2; padding: 10px 15px; margin: 0px; font-size: 20px; text-transform: uppercase;text-align: center; }
+.showinfo li ul{padding:0px;}
+.showinfo li li{margin: 0px; border: 0px; float: none; display: block; padding-bottom: 5px; height: auto; text-align: center; color: 008fd5; font-size: 13px;border-bottom: 1px dashed #b2b2b2;padding: 20px 0px;}
+
+.showinfo li.last{border-right:0px;}
