@@ -80,14 +80,16 @@ class MainHandler(Handler):
         shows = []
         for show in all_shows:
             for item in show['performance']:
-                if item['artist']['displayName'] in artists:
+                artist = item['artist']['displayName']
+                #if artist in artists:
+                # XXX: hack, just show everything for now
+                if True:
+                    show['headliner'] = artist
                     shows.append(show)
-                    continue
+                    break
 
         self.render('main.html', {
-            #'shows' : shows,
-            # temporary design hack, display all shows
-            'shows' : all_shows,
+            'shows' : shows,
         })
 
 class LoginHandler(Handler):

@@ -7,41 +7,38 @@ Showdio - Find out when your favorite bands play your town
 {% endblock %}
 
 {% block content %}
-  {% for show in shows %}
-    <p>{{ show['displayName'] }}</p>
-  {% endfor %}
-
-
 <ul class="showinfo">
-<li>
-<h2>Date</h2>
-<ul>
-<li>09/03</li>
-<li>09/07</li>
+  <li>
+    <h2>Date</h2>
+    <ul>
+      {% for show in shows %}
+        <li>{{ show['start']['date'] }}</li>
+      {% endfor %}
+    </ul>
+  </li>
+  <li>
+    <h2>Artist</h2>
+    <ul>
+      {% for show in shows %}
+        <li>{{ show['headliner'] }}</li>
+      {% endfor %}
+    </ul>
+  </li>		
+  <li>
+    <h2>Venue</h2>
+    <ul>
+      {% for show in shows %}
+        <li>{{ show['venue']['displayName'] }}</li>
+      {% endfor %}
+    </ul>
+  </li>		
+  <li class="last">
+    <h2>Tickets</h2>
+    <ul>
+      {% for show in shows %}
+        <li>Buy Tickets</li>
+      {% endfor %}
+    </ul>
+  </li>		
 </ul>
-</li>
-<li>
-<h2>Artist</h2>
-<ul>
-<li>Beirut</li>
-<li>Thao & Mirah</li>
-</ul>
-</li>		
-<li>
-<h2>Venue</h2>
-<ul>
-<li>Fox Theater</li>
-<li>The Independent</li>
-</ul>
-</li>		
-<li class="last">
-<h2>Tickets</h2>
-<ul>
-<li>Buy Tickets</li>
-<li>Buy Tickets</li>
-</ul>
-</li>		
-</ul>
-
-
 {% endblock %}
