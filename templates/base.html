@@ -19,7 +19,9 @@
       <a href="/"><img class="logo" src="img/showdio.png"></a>
       <div id="userinfo">
       {% if user %}
-        <img class="icon" src="{{ user['icon'] }}" /> Hey, {{ user['firstName'] }}! |
+        <img class="icon" src="{{ user['icon'] }}" />
+        Hey, {{ user['firstName'] }}! |
+        <a href="/location">{{ user['location'] }}</a> |
         <a href="/logout">Sign Out</a>
       {% else %}
         <a href="/login">Sign In</a>

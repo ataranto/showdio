@@ -35,7 +35,9 @@ class Handler(webapp2.RequestHandler):
     # memoize/property
     def _get_user(self):
         try:
-            return self.rdio.call('currentUser').get('result')
+            return self.rdio.call('currentUser', {
+                'extras' : 'location',
+            }).get('result')
         except Exception as ex:
             return None
 
@@ -124,10 +126,19 @@ class LogoutHandler(Handler):
         self.clear_cookies()
         self.redirect('/')
 
+class LocationHandler(Handler):
+    def get(self):
+        if self._get_user() is None:
+            self.redirect('/')
+        else:
+            self.render('location.html')
+
 app = webapp2.WSGIApplication([
     webapp2.Route('/', handler=MainHandler),
 
     webapp2.Route('/login', handler=LoginHandler),
     webapp2.Route('/login_cb', handler=LoginCallbackHandler, name='login_cb'),
     webapp2.Route('/logout', handler=LogoutHandler, name='logout'),
+
+    webapp2.Route('/location', handler=LocationHandler),
 ], debug=True)
