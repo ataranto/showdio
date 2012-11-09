@@ -1,3 +1,4 @@
+secret.py
 .*.swp
 *.pyc
-secret.py
+.DS_Store

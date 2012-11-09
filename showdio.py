@@ -63,15 +63,15 @@ class MainHandler(Handler):
         }).get('result')
         rdio_history = self.rdio.call('getPlayHistory', {
             'user' : self._get_user()['key'],
-        })['result']
+        }).get('result')
 
         artists = set()
         map(lambda x: artists.add(x['name']), rdio_artists)
-        map(lambda x: artists.add(x['artist']), rdio_history)
+        #map(lambda x: artists.add(x['artist']), rdio_history)
 
         # SF Bay Area, hardcoded
         location = 26330
-        songkick_api_url = 'http://api.songkick.com/api/3.0/metro_areas/%d/calendar.json?apikey=eRACBJEh2i3NOewK' % location
+        songkick_api_url = 'http://api.songkick.com/api/3.0/metro_areas/%d/calendar.json?apikey=%s' % (location, secret.songkick_api_key)
 
         response = urllib2.urlopen(songkick_api_url)
         all_shows = json.load(response). \
