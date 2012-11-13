@@ -16,8 +16,8 @@ class Handler(webapp2.RequestHandler):
     def __init__(self, request, response):
         self.initialize(request, response)
         self.rdio = self._get_rdio()
+        self.user = self._get_user()
 
-    # memoize/property
     def _get_rdio(self):
         token = \
             self.request.cookies.get('rt') or \
@@ -33,7 +33,6 @@ class Handler(webapp2.RequestHandler):
         else:
             return rdio.Rdio((secret.rdio_api_key, secret.rdio_api_secret))
 
-    # memoize/property
     def _get_user(self):
         try:
             return self.rdio.call('currentUser', {
@@ -47,7 +46,7 @@ class Handler(webapp2.RequestHandler):
             self.response.delete_cookie(cookie)
 
     def render(self, template, values={}):
-        values['user'] = self._get_user()
+        values['user'] = self.user
 
         template = Handler.jinja.get_template(template)
         output = template.render(values)
@@ -55,7 +54,7 @@ class Handler(webapp2.RequestHandler):
 
 class MainHandler(Handler):
     def get(self):
-        if self._get_user() is None:
+        if self.user is None:
             self.render('main.html')
             return
             
@@ -63,7 +62,7 @@ class MainHandler(Handler):
             'count' : 100,
         }).get('result')
         rdio_history = self.rdio.call('getPlayHistory', {
-            'user' : self._get_user()['key'],
+            'user' : self.user['key'],
         }).get('result')
 
         artists = set()
@@ -131,7 +130,7 @@ class LogoutHandler(Handler):
 
 class LocationHandler(Handler):
     def get(self):
-        if self._get_user() is None:
+        if self.user is None:
             self.redirect('/')
         else:
             self.render('location.html')
