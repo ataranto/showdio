@@ -1,5 +1,6 @@
 import jinja2
 import json
+import logging
 import os
 import rdio
 import urllib2
@@ -66,8 +67,8 @@ class MainHandler(Handler):
         }).get('result')
 
         artists = set()
-        map(lambda x: artists.add(x['name']), rdio_artists)
-        #map(lambda x: artists.add(x['artist']), rdio_history)
+        map(lambda x: artists.add(x.get('name')), rdio_artists)
+        map(lambda x: artists.add(x.get('artist')), rdio_history)
 
         # SF Bay Area, hardcoded
         location = 26330
