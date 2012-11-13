@@ -54,6 +54,10 @@ class Handler(webapp2.RequestHandler):
 
 class MainHandler(Handler):
     def get(self):
+        # XXX
+        self.render('main.html')
+        return
+
         if self.user is None:
             self.render('main.html')
             return

@@ -16,7 +16,7 @@ Showdio - Find out when your favorite bands play your town
           <th>Tickets</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="body">
         {% for show in shows %}
           <tr>
             <td>{{ show['start']['date'] }}</td>
