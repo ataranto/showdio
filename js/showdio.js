@@ -12,7 +12,7 @@ $(document).ready(function() {
               '</tr>' +
             '{{/event}}';
         var rows = $.mustache(template, response.resultsPage.results);
-        $('#body').append(rows);
+        $('#tbody').append(rows);
 
         var events = response.resultsPage.results.event;
         for (var x = 0; x < events.length; x++) {

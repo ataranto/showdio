@@ -15,15 +15,6 @@
     <div class="container">
       <div class="row-fluid">
         <a href="/"><img class="logo" src="img/showdio.png"></a>
-
-        {% if user %}
-          <img class="icon" src="{{ user['icon'] }}" />
-          Hey, {{ user['firstName'] }}! |
-          <a href="/location">{{ user['location'] }}</a> |
-          <a href="/logout">Sign Out</a>
-        {% else %}
-          <a href="/login">Sign In</a>
-        {% endif %}
       </div>
 
       <div class="row-fluid">
@@ -35,8 +26,9 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
     <script src="https://rdio.com/api/api.js?client_id=HaFppqX7mO61Lbth-M0h_g"></script>
-    <script src="js/jquery.mustache.js"></script>
-    <script src="js/showdio.js"></script>
+
+    {% block scripts %}
+    {% endblock %}
 
   </body>
 </html>

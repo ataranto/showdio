@@ -5,28 +5,22 @@ Showdio - Find out when your favorite bands play your town
 {% endblock %}
 
 {% block content %}
-  {% if user %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Artists</th>
+        <th>Venue</th>
+        <th>Tickets</th>
+      </tr>
+    </thead>
+    <tbody id="tbody">
 
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Artist</th>
-          <th>Venue</th>
-          <th>Tickets</th>
-        </tr>
-      </thead>
-      <tbody id="body">
-        {% for show in shows %}
-          <tr>
-            <td>{{ show['start']['date'] }}</td>
-            <td>{{ show['headliner'] }}</td>
-            <td>{{ show['venue']['displayName'] }}</td>
-            <td>Buy Tickets</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    </tbody>
+  </table>
+{% endblock %}
 
-  {% endif %}
+{% block scripts %}
+  <script src="js/jquery.mustache.js"></script>
+  <script src="js/showdio.js"></script>
 {% endblock %}
