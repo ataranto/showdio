@@ -27,6 +27,22 @@ $(document).ready(function() {
 R.ready(function() {
     R.authenticate(function() {
         R.request({
+            method: "currentUser",
+            success: function(response) {
+                var template = '<img src="{{ result.icon }}" />';
+                var icon = $.mustache(template, response);
+                $('#header').append(icon);
+
+                var template = '<p>Hey, {{ result.firstName }}!</p>';
+                var greeting = $.mustache(template, response);
+                $('#header').append(greeting);
+            },
+            error: function(response) {
+                alert("error");
+            },
+        });
+
+        R.request({
             method: "getArtistsInCollection",
             content: {
                 count: 100,
