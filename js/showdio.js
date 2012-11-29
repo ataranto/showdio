@@ -80,9 +80,12 @@ R.ready(function() {
             success: function(response) {
                 for (var x = 0; x < response.result.length; x++) {
                     var artist = response.result[x].name;
-                    //alert(artist);
                     if (artist in songkick_artists_map) {
-                        alert(artist);
+                        var events = songkick_artists_map[artist];
+                        for (var y = 0; y < events.length; y++) {
+                            $('#' + events[y]).
+                                css('background-color', 'yellow');
+                        }
                     }
                 }
             },
