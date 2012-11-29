@@ -1,24 +1,34 @@
 var songkick_artists_map = {};
 
+var event_template =
+  '{{#event}}' +
+    '<tr id="{{ id }}"> ' +
+      '<td>{{ start.date }}</td>' +
+      '<td>' + 
+        '{{#performance}}' +
+          '<p>{{ artist.displayName }}</p>' +
+        '{{/performance}}' +
+      '</td>' + 
+      '<td>{{ venue.displayName }}</td>' +
+      '<td> Buy Tickets </td>' +
+    '<tr>' +
+  '{{/event}}';
+  ;
+
 $(document).ready(function() {
     $.getJSON("http://api.songkick.com/api/3.0/events.json?location=clientip&apikey=G2KCF6q91g23Q6Zh&jsoncallback=?", function(response) {
-        var template =
-            '{{#event}}' +
-              '<tr>' +
-                '<td>{{ start.date }}</td>' +
-                '<td>{{ performance.0.artist.displayName }}</td>' +
-                '<td>{{ venue.displayName }}</td>' +
-                '<td> Buy Tickets </td>' +
-              '</tr>' +
-            '{{/event}}';
-        var rows = $.mustache(template, response.resultsPage.results);
+        var rows = $.mustache(event_template, response.resultsPage.results);
         $('#tbody').append(rows);
 
-        var events = response.resultsPage.results.event;
-        for (var x = 0; x < events.length; x++) {
-            for (var y = 0; y < events[x].performance.length; y++) {
-                var artist = events[x].performance[y].artist.displayName;
-                songkick_artists_map[artist] = true;
+        var event = response.resultsPage.results.event;
+        for (var x = 0; x < event.length; x++) {
+            for (var y = 0; y < event[x].performance.length; y++) {
+                var artist = event[x].performance[y].artist.displayName;
+
+                if (songkick_artists_map[artist] === undefined) {
+                    songkick_artists_map[artist] = [];
+                }
+                songkick_artists_map[artist].push(event[x].id);
             }
         }
     });
