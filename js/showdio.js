@@ -15,8 +15,22 @@ var event_template =
   '{{/event}}';
   ;
 
-$(document).ready(function() {
-    $.getJSON("http://api.songkick.com/api/3.0/events.json?location=clientip&apikey=G2KCF6q91g23Q6Zh&jsoncallback=?", function(response) {
+function get_events(page) {
+    if (page > 5) {
+        return;
+    }
+
+    var url =
+        'http://api.songkick.com/api/3.0/events.json' +
+        '?location=clientip' +
+        '&apikey=G2KCF6q91g23Q6Zh' +
+        '&page=' + page +
+        '&jsoncallback=?';
+    $.getJSON(url, function(response) {
+        if (response.resultsPage.status != 'ok') {
+            return;
+        }
+
         var rows = $.mustache(event_template, response.resultsPage.results);
         $('#tbody').append(rows);
 
@@ -31,7 +45,13 @@ $(document).ready(function() {
                 songkick_artists_map[artist].push(event[x].id);
             }
         }
+
+        get_events(response.resultsPage.page + 1);
     });
+}
+
+$(document).ready(function() {
+    get_events(1);
 });
 
 R.ready(function() {
