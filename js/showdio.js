@@ -95,11 +95,11 @@
         $('#unauthenticated').hide();
 
         var template = '<img src="{{ icon }}" />';
-        var icon = $.mustache(template, R.currentUser);
+        var icon = $.mustache(template, R.currentUser.attributes);
         $('#header').append(icon);
 
         var template = '<p>Hey, {{ firstName }}!</p>';
-        var greeting = $.mustache(template, R.currentUser);
+        var greeting = $.mustache(template, R.currentUser.attributes);
         $('#header').append(greeting);
 
         getArtists(0);
