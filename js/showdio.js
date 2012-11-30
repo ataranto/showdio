@@ -67,7 +67,6 @@
                     return;
                 }
 
-                alert(JSON.stringify(response));
                 for (var x = 0; x < response.result.length; x++) {
                     var artist = response.result[x].name;
                     if (artist in songkickArtistsMap) {
