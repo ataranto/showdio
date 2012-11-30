@@ -1,7 +1,7 @@
 (function() {
-    var songkick_artists_map = {};
+    var songkickArtistsMap = {};
 
-    var event_template =
+    var eventTemplate =
       '{{#event}}' +
         '<tr id="{{ id }}"> ' +
           '<td>{{ start.date }}</td>' +
@@ -16,7 +16,7 @@
       '{{/event}}';
       ;
 
-    function get_events(page) {
+    function getEvents(page) {
         if (page > 5) {
             return;
         }
@@ -32,7 +32,7 @@
                 return;
             }
 
-            var rows = $.mustache(event_template, response.resultsPage.results);
+            var rows = $.mustache(eventTemplate, response.resultsPage.results);
             $('#tbody').append(rows);
 
             var event = response.resultsPage.results.event;
@@ -40,18 +40,18 @@
                 for (var y = 0; y < event[x].performance.length; y++) {
                     var artist = event[x].performance[y].artist.displayName;
 
-                    if (songkick_artists_map[artist] === undefined) {
-                        songkick_artists_map[artist] = [];
+                    if (songkickArtistsMap[artist] === undefined) {
+                        songkickArtistsMap[artist] = [];
                     }
-                    songkick_artists_map[artist].push(event[x].id);
+                    songkickArtistsMap[artist].push(event[x].id);
                 }
             }
 
-            get_events(response.resultsPage.page + 1);
+            getEvents(response.resultsPage.page + 1);
         });
     }
 
-    function rdio_authenticated() {
+    function rdioAuthenticated() {
         $('#unauthenticated').hide();
 
         var template = '<img src="{{ icon }}" />';
@@ -70,8 +70,8 @@
             success: function(response) {
                 for (var x = 0; x < response.result.length; x++) {
                     var artist = response.result[x].name;
-                    if (artist in songkick_artists_map) {
-                        var events = songkick_artists_map[artist];
+                    if (artist in songkickArtistsMap) {
+                        var events = songkickArtistsMap[artist];
                         for (var y = 0; y < events.length; y++) {
                             $('#' + events[y]).
                                 css('background-color', 'yellow');
@@ -88,19 +88,17 @@
     $("#authenticate_button").click(function() {
         R.authenticate(function(authenticated) {
             if (authenticated) {
-                rdio_authenticated();
+                rdioAuthenticated();
             }
         });
     });
         
 
     $(document).ready(function() {
-        get_events(1);
-
         if ('R' in window) {
             R.ready(function() {
                 if (R.authenticated()) {
-                    rdio_authenticated();           
+                    rdioAuthenticated();           
                 } else {
                     $('#unauthenticated').show();
                     // XXX: show some unauthenticated ui
@@ -109,5 +107,7 @@
         } else {
             // XXX: handle no rdio error case
         }
+
+        getEvents(1);
     });
  })();
