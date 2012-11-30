@@ -52,6 +52,8 @@
     }
 
     function rdio_authenticated() {
+        $('#unauthenticated').hide();
+
         var template = '<img src="{{ icon }}" />';
         var icon = $.mustache(template, R.currentUser);
         $('#header').append(icon);
@@ -78,10 +80,19 @@
                 }
             },
             error: function(response) {
-                alert("error");
+                // XXX: handle
             },
         });
     }
+
+    $("#authenticate_button").click(function() {
+        R.authenticate(function(authenticated) {
+            if (authenticated) {
+                rdio_authenticated();
+            }
+        });
+    });
+        
 
     $(document).ready(function() {
         get_events(1);
@@ -91,6 +102,7 @@
                 if (R.authenticated()) {
                     rdio_authenticated();           
                 } else {
+                    $('#unauthenticated').show();
                     // XXX: show some unauthenticated ui
                 }
             });
