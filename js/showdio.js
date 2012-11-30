@@ -14,7 +14,6 @@
           '<td> Buy Tickets </td>' +
         '<tr>' +
       '{{/event}}';
-      ;
 
     function getEvents(page) {
         if (page > 5) {
@@ -59,13 +58,14 @@
             method: "getArtistsInCollection",
             content: {
                 start: start,
-                count: batchCount,
+                count: batchCount
             },
             success: function(response) {
                 if (response.status != 'ok' || response.result.length == 0) {
                     // XXX: log?
                     return;
                 }
+                start += response.result.length;
 
                 for (var x = 0; x < response.result.length; x++) {
                     var artist = response.result[x].name;
@@ -79,12 +79,12 @@
                 }
 
                 if (response.result.length == batchCount) {
-                    getArtists(response.result.length + 1);
+                    getArtists(start);
                 }
             },
             error: function(response) {
                 // XXX: handle
-            },
+            }
         });
     }
 
