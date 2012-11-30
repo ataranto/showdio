@@ -69,7 +69,6 @@
                     // XXX: log?
                     return;
                 }
-                start += response.result.length;
 
                 for (var x = 0; x < response.result.length; x++) {
                     var artist = response.result[x].name;
@@ -83,7 +82,7 @@
                 }
 
                 if (response.result.length == batchCount) {
-                    getArtists(start);
+                    getArtists(start + result.result.length);
                 }
             },
             error: function(response) {
