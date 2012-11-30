@@ -29,6 +29,7 @@
             '&jsoncallback=?';
         $.getJSON(url, function(response) {
             if (response.resultsPage.status != 'ok') {
+                // XXX: log?
                 return;
             }
 
@@ -51,6 +52,43 @@
         });
     }
 
+    function getArtists(start) {
+        var batchCount = 100;
+
+        R.request({
+            method: "getArtistsInCollection",
+            content: {
+                start: start,
+                count: batchCount,
+            },
+            success: function(response) {
+                if (response.status != 'ok' || response.result.length == 0) {
+                    // XXX: log?
+                    return;
+                }
+
+                alert(JSON.stringify(response));
+                for (var x = 0; x < response.result.length; x++) {
+                    var artist = response.result[x].name;
+                    if (artist in songkickArtistsMap) {
+                        var events = songkickArtistsMap[artist];
+                        for (var y = 0; y < events.length; y++) {
+                            $('#' + events[y]).
+                                css('background-color', 'yellow');
+                        }
+                    }
+                }
+
+                if (response.result.length == batchCount) {
+                    getArtists(response.result.length + 1);
+                }
+            },
+            error: function(response) {
+                // XXX: handle
+            },
+        });
+    }
+
     function rdioAuthenticated() {
         $('#unauthenticated').hide();
 
@@ -62,27 +100,7 @@
         var greeting = $.mustache(template, R.currentUser);
         $('#header').append(greeting);
 
-        R.request({
-            method: "getArtistsInCollection",
-            content: {
-                count: 100,
-            },
-            success: function(response) {
-                for (var x = 0; x < response.result.length; x++) {
-                    var artist = response.result[x].name;
-                    if (artist in songkickArtistsMap) {
-                        var events = songkickArtistsMap[artist];
-                        for (var y = 0; y < events.length; y++) {
-                            $('#' + events[y]).
-                                css('background-color', 'yellow');
-                        }
-                    }
-                }
-            },
-            error: function(response) {
-                // XXX: handle
-            },
-        });
+        getArtists(0);
     }
 
     $("#authenticate_button").click(function() {
@@ -92,7 +110,6 @@
             }
         });
     });
-        
 
     $(document).ready(function() {
         if ('R' in window) {
