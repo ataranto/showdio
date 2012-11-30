@@ -82,7 +82,7 @@
                 }
 
                 if (response.result.length == batchCount) {
-                    getArtists(start + result.result.length);
+                    getArtists(start + response.result.length);
                 }
             },
             error: function(response) {
