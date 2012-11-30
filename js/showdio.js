@@ -7,10 +7,14 @@
           '<td>{{ start.date }}</td>' +
           '<td>' + 
             '{{#performance}}' +
-              '<p>{{ artist.displayName }}</p>' +
+              '<p>' +
+                '<a href="{{ artist.uri }}">{{ artist.displayName }}</a>' +
+              '</p>' +
             '{{/performance}}' +
           '</td>' + 
-          '<td>{{ venue.displayName }}</td>' +
+          '<td>' +
+            '<a href="{{ venue.uri }}">{{ venue.displayName }}</a>' +
+           '</td>' +
           '<td> Buy Tickets </td>' +
         '<tr>' +
       '{{/event}}';
