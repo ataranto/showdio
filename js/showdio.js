@@ -90,32 +90,33 @@
         });
     }
 
-    function rdioAuthenticated() {
-        $('#unauthenticated').hide();
+    function setAuthenticated(authenticated) {
+        if (authenticated) {
+            $('#unauthenticated').hide();
+            $('#authenticated').show();
+        } else {
+            $('#unauthenticated').show();
+            $('#authenticated').hide();
+        }
 
-        getArtists();
+        if (authenticated) {
+            getArtists();
+        }
     }
 
     $("#authenticate_button").click(function() {
         R.authenticate(function(authenticated) {
-            if (authenticated) {
-                rdioAuthenticated();
-            }
+            setAuthenticated(authenticated);
         });
     });
 
     $(document).ready(function() {
         if ('R' in window) {
             R.ready(function() {
-                if (R.authenticated()) {
-                    rdioAuthenticated();           
-                } else {
-                    $('#unauthenticated').show();
-                    // XXX: show some unauthenticated ui
-                }
+                setAuthenticated(R.authenticated());
             });
         } else {
             // XXX: handle no rdio error case
         }
     });
- })();
+})();

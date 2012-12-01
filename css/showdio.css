@@ -25,3 +25,16 @@ body {
   font-size: 30px;
   line-height: 60px;
 }
+
+#authenticated {
+    display: none;
+}
+
+#unauthenticated {
+    padding-top: 100px;
+    text-align: center;
+}
+
+#unauthenticated p {
+    padding-top: 45px;
+}
