@@ -1,0 +1,23 @@
+.container {
+  width: 960px;
+}
+
+#header {
+  background: black url('/img/header.png') no-repeat top center;
+  color: white;
+  height: 460px;
+}
+
+#header .container {
+  padding-top: 100px;
+}
+
+.headline {
+  font-size: 60px;
+  line-height: 60px;
+}
+
+.subhead {
+  font-size: 30px;
+  line-height: 60px;
+}

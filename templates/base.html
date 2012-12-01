@@ -8,17 +8,18 @@
     </title>
 
      <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+     <link href="css/showdio.css" rel="stylesheet" media="screen">
   </head>
 
   <body>
 
-    <div class="container">
-      <div class="row-fluid">
-        <a href="/"><img class="logo" src="img/showdio.png"></a>
-          <div id="header">
-          </div>
+    <div id="header">
+      <div class="container">
+        <div class="headline">Showdio</div>
+        <div class="subhead">Artists in your collection, concerts in your town.</div>
       </div>
-
+    </div>
+    <div class="container" id="content">
       <div class="row-fluid">
         {% block content %}
         {% endblock %}
