@@ -1,26 +1,62 @@
 (function() {
-    var songkickArtistsMap = {};
+    var artists = {};
 
     var eventTemplate =
-      '{{#event}}' +
-        '<tr id="{{ id }}"> ' +
-          '<td>{{ start.date }}</td>' +
-          '<td>' + 
-            '{{#performance}}' +
-              '<p>' +
-                '<a href="{{ artist.uri }}">{{ artist.displayName }}</a>' +
-              '</p>' +
-            '{{/performance}}' +
-          '</td>' + 
-          '<td>' +
-            '<a href="{{ venue.uri }}">{{ venue.displayName }}</a>' +
-           '</td>' +
-          '<td> Buy Tickets </td>' +
-        '<tr>' +
-      '{{/event}}';
+      '<tr id="{{ id }}"> ' +
+        '<td>{{ start.date }}</td>' +
+        '<td>' + 
+          '{{#performance}}' +
+            '<p>' +
+              '<a href="{{ artist.uri }}">{{ artist.displayName }}</a>' +
+            '</p>' +
+          '{{/performance}}' +
+        '</td>' + 
+        '<td>' +
+          '<a href="{{ venue.uri }}">{{ venue.displayName }}</a>' +
+         '</td>' +
+        '<td> Buy Tickets </td>' +
+      '<tr>';
+
+    function getArtists(start) {
+        if (typeof(start) === 'undefined') start = 0;
+        var batchCount = 100;
+
+        R.request({
+            method: "getArtistsInCollection",
+            content: {
+                start: start,
+                count: batchCount
+            },
+            success: function(response) {
+                if (response.status != 'ok' || response.result.length == 0) {
+                    // XXX: log?
+                    // XXX: maybe call getEvents() from here?
+                    return;
+                }
+
+                for (var x = 0; x < response.result.length; x++) {
+                    var artist = response.result[x].name;
+                    artists[artist] = true;
+                }
+
+                if (response.result.length == batchCount) {
+                    getArtists(start + response.result.length);
+                } else {
+                    // XXX: should use jquery deferred object
+                    // http://api.jquery.com/category/deferred-object/
+                    getEvents();
+                }
+            },
+            error: function(response) {
+                // XXX: handle
+            }
+        });
+    }
 
     function getEvents(page) {
-        if (page > 5) {
+        if (typeof(page) === 'undefined') {
+            page = 1;
+        } else if (page > 5) {
             return;
         }
 
@@ -36,58 +72,21 @@
                 return;
             }
 
-            var rows = $.mustache(eventTemplate, response.resultsPage.results);
-            $('#tbody').append(rows);
-
             var event = response.resultsPage.results.event;
             for (var x = 0; x < event.length; x++) {
                 for (var y = 0; y < event[x].performance.length; y++) {
                     var artist = event[x].performance[y].artist.displayName;
 
-                    if (songkickArtistsMap[artist] === undefined) {
-                        songkickArtistsMap[artist] = [];
-                    }
-                    songkickArtistsMap[artist].push(event[x].id);
+                    if (artist in artists) {
+                        var row = $.mustache(eventTemplate, event[x]);
+                        $('#tbody').append(row);
+
+                        continue;
+                    };
                 }
             }
 
             getEvents(response.resultsPage.page + 1);
-        });
-    }
-
-    function getArtists(start) {
-        var batchCount = 100;
-
-        R.request({
-            method: "getArtistsInCollection",
-            content: {
-                start: start,
-                count: batchCount
-            },
-            success: function(response) {
-                if (response.status != 'ok' || response.result.length == 0) {
-                    // XXX: log?
-                    return;
-                }
-
-                for (var x = 0; x < response.result.length; x++) {
-                    var artist = response.result[x].name;
-                    if (artist in songkickArtistsMap) {
-                        var events = songkickArtistsMap[artist];
-                        for (var y = 0; y < events.length; y++) {
-                            $('#' + events[y]).
-                                css('background-color', 'yellow');
-                        }
-                    }
-                }
-
-                if (response.result.length == batchCount) {
-                    getArtists(start + response.result.length);
-                }
-            },
-            error: function(response) {
-                // XXX: handle
-            }
         });
     }
 
@@ -102,7 +101,7 @@
         var greeting = $.mustache(template, R.currentUser.attributes);
         $('#header').append(greeting);
 
-        getArtists(0);
+        getArtists();
     }
 
     $("#authenticate_button").click(function() {
@@ -126,7 +125,5 @@
         } else {
             // XXX: handle no rdio error case
         }
-
-        getEvents(1);
     });
  })();
