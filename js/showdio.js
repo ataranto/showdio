@@ -119,9 +119,10 @@
                 sort: 'playCount'
             },
             success: function(response) {
-                var $event = $('#' + event.id);
-                var img = '<img class="loaded_image" src="' + response.result[0].icon + '">';
-                $event.find('.artist_image').append(img);
+                var img_template =
+                    '<img class="loaded_image" src="{{ result.0.icon }}">';
+                var img = $.mustache(img_template, response);
+                $('#' + event.id).find('.artist_image').append(img);
             }
         });
     }
