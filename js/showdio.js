@@ -111,9 +111,11 @@
     }
 
     function formatDate(dateStr) {
-        var date = new Date(dateStr);
+        var parts = dateStr.split('-');
+        var month = parseInt(parts[1], 10);
+        var day = parseInt(parts[2], 10);
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        return months[date.getMonth()] + ' ' + date.getDate();
+        return months[month-1] + ' ' + day;
     }
 
     function getArtistArt(artist, event) {
