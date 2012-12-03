@@ -54,7 +54,7 @@
     function getEvents(page) {
         if (typeof(page) === 'undefined') {
             page = 1;
-        } else if (page > 15) {
+        } else if (page > 30) {
             return eventsLoaded();
         }
 
@@ -87,7 +87,7 @@
 
                         getArtistArt(artist, event[x]);
 
-                        continue;
+                        break;
                     }
                 }
             }
