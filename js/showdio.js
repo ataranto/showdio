@@ -20,7 +20,7 @@
         var batchCount = 100;
 
         R.request({
-            method: "getArtistsInCollection",
+            method: 'getArtistsInCollection',
             content: {
                 start: start,
                 count: batchCount
@@ -111,7 +111,7 @@
     function getArtistArt(artist, event) {
 
         R.request({
-            method: "getAlbumsForArtist",
+            method: 'getAlbumsForArtist',
             content: {
                 artist: artist.rdioKey,
                 start: 0,
@@ -133,7 +133,7 @@
         }
     }
 
-    $("#authenticate_button").click(function() {
+    $('#authenticate_button').click(function() {
         R.authenticate(function(authenticated) {
             setAuthenticated(authenticated);
         });
