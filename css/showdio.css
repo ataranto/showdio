@@ -1,4 +1,5 @@
 body {
+  background: url('/img/background.png') repeat;
   font-family: 'Open Sans', sans-serif;
 }
 
@@ -73,17 +74,20 @@ body {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
+  background-color: #fff;
   display: block;
+  height: 220px;
   margin-bottom: 4px;
   position: relative;
 }
 
 .event_grid .event .artist_image .loaded_image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 4px;
-  width: 212px;
+  padding: 5px;
+  width: 210px;
+}
+
+.event_grid .event .metadata {
+  padding-left: 5px;
 }
 
 .event_grid .event .date,

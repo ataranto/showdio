@@ -5,14 +5,14 @@
       '<div id="{{ id }}" class="event">' +
           '{{#performance}}' +
             '{{#artist.match}}' +
-              '<a class="artist_image" href="{{ artist.uri }}">' +
-                '<img class="placeholder" src="/img/artist_bg.png">' +
-              '</a>' +
-              '<a class="artist trucated_line" href="{{ artist.uri }}">{{ artist.displayName }}</a>' +
+              '<a class="artist_image" href="{{ artist.uri }}"></a>' +
+              '<div class="metadata">' +
+                '<a class="artist trucated_line" href="{{ artist.uri }}">{{ artist.displayName }}</a>' +
             '{{/artist.match}}' +
           '{{/performance}}' +
-          '<a class="venue truncated_line" href="{{ venue.uri }}">{{ venue.displayName }}</a>' +
-          '<span class="date">{{ start.date }}</span>' +
+            '<a class="venue truncated_line" href="{{ venue.uri }}">{{ venue.displayName }}</a>' +
+            '<span class="date">{{ start.formattedDate }}</span>' +
+          '</div>' +
       '</div>';
 
     function getArtists(start) {
@@ -79,6 +79,8 @@
                     var artist = event[x].performance[y].artist;
                     var name = artist.displayName;
 
+                    event[x].start.formattedDate = formatDate(event[x].start.date);
+
                     if (artists[name]) {
                         artist.match = true;
                         artist.rdioKey = artists[name].artistKey;
@@ -106,6 +108,12 @@
             $('#unauthenticated').show();
             $('#events').hide();
         }
+    }
+
+    function formatDate(dateStr) {
+        var date = new Date(dateStr);
+        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        return months[date.getMonth()] + ' ' + date.getDate();
     }
 
     function getArtistArt(artist, event) {
