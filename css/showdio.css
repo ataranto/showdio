@@ -6,6 +6,13 @@ body {
   width: 960px;
 }
 
+.truncated_line {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 #header {
   background: black url('/img/header.png') no-repeat top center;
   color: white;
@@ -25,3 +32,35 @@ body {
   font-size: 30px;
   line-height: 60px;
 }
+
+#events {
+  padding-top: 20px;
+}
+
+.event_grid .event {
+  display: block;
+  float: left;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  width: 220px;
+}
+
+.event_grid .event .artist_image,
+.event_grid .event .artist_image .placeholder {
+  width: 100%;
+}
+
+.event_grid .event .date,
+.event_grid .event .artist,
+.event_grid .event .venue {
+  color: #89949b;
+  display: block;
+  font-size: 14px;
+}
+
+.event_grid .event .artist {
+  color: #4b5c66;
+  font-size: 16px;
+}
+
+
