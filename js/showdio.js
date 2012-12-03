@@ -1,5 +1,6 @@
 (function() {
     var artists = {};
+    var animationTimeout;
 
     var eventTemplate =
       '<div id="{{ id }}" class="event">' +
@@ -58,6 +59,8 @@
             return eventsLoaded();
         }
 
+        var isFirst = $('#events .event').length == 0;
+
         var url =
             'http://api.songkick.com/api/3.0/events.json' +
             '?location=clientip' +
@@ -87,6 +90,11 @@
                         var row = $.mustache(eventTemplate, event[x]);
                         $('#events .event_grid').append(row);
 
+                        if (isFirst) {
+                            showLoading('lower_left', 'Loading more shows');
+                            isFirst = false;
+                        }
+
                         getArtistArt(artist, event[x]);
 
                         break;
@@ -103,6 +111,7 @@
             $('#unauthenticated').hide();
             $('#events').show();
 
+            showLoading();
             getArtists();
         } else {
             $('#unauthenticated').show();
@@ -116,6 +125,33 @@
         var day = parseInt(parts[2], 10);
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         return months[month-1] + ' ' + day;
+    }
+
+    function showLoading(extraClass, message) {
+        var $loading = $('#loading');
+        var $dot = $loading.find('.dot');
+        if (extraClass) {
+            $loading.addClass(extraClass);
+        }
+        if (message) {
+            $loading.find('.message').html(message);
+        }
+        if (!animationTimeout) {
+            animationTimeout = setInterval(function() {
+                console.log('checking');
+                if ($dot.hasClass('fade')) {
+                    $dot.removeClass('fade');
+                } else {
+                    $dot.addClass('fade');
+                }
+            }, 2000);
+        }
+        $loading.show();
+    }
+
+    function hideLoading() {
+        $('#loading').hide();
+        clearInterval(animationTimeout);
     }
 
     function getArtistArt(artist, event) {
@@ -138,6 +174,7 @@
     }
 
     function eventsLoaded() {
+        hideLoading();
         var $events = $('#events');
         if ($events.find('.event').length == 0) {
             $events.append('<div class="no_results">No events found!</div>');

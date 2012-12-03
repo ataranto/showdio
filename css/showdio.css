@@ -48,6 +48,45 @@ body {
   vertical-align: bottom;
 }
 
+#loading {
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  background-color: #000;
+  color: #fff;
+  display: none;
+  opacity: 0.55;
+  margin: 45px auto 0;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 28px;
+  padding: 20px;
+  width: 210px;
+}
+
+#loading.lower_left {
+  position: fixed;
+  bottom: 30px;
+  left: 20px;
+}
+
+#loading .dot {
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  transition: opacity 2s linear 0s;
+  border-radius: 8px;
+  background-color: #fff;
+  display: inline-block;
+  margin-right: 10px;
+  vertical-align: sub;
+  width: 16px;
+  height: 16px;
+}
+
+#loading .dot.fade {
+  opacity: 0.2;
+}
+
 #events {
   display: none;
   padding-top: 20px;
