@@ -80,9 +80,12 @@
                     var name = artist.displayName;
 
                     if (artists[name]) {
-                        event[x].performance[y].artist.match = true;
+                        artist.match = true;
+                        artist.rdioKey = artists[name].artistKey;
                         var row = $.mustache(eventTemplate, event[x]);
                         $('#events .event_grid').append(row);
+
+                        getArtistArt(artist, event[x]);
 
                         continue;
                     }
@@ -90,6 +93,24 @@
             }
 
             getEvents(response.resultsPage.page + 1);
+        });
+    }
+
+    function getArtistArt(artist, event) {
+
+        R.request({
+            method: "getAlbumsForArtist",
+            content: {
+                artist: artist.rdioKey,
+                start: 0,
+                count: 1,
+                sort: 'playCount'
+            },
+            success: function(response) {
+                var $event = $('#' + event.id);
+                var img = '<img class="loaded_image" src="' + response.result[0].icon + '">';
+                $event.find('.artist_image').append(img);
+            }
         });
     }
 
