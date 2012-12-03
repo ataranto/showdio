@@ -2,20 +2,18 @@
     var artists = {};
 
     var eventTemplate =
-      '<tr id="{{ id }}"> ' +
-        '<td>{{ start.date }}</td>' +
-        '<td>' + 
+      '<div id="{{ id }}" class="event">' +
           '{{#performance}}' +
-            '<p>' +
-              '<a href="{{ artist.uri }}">{{ artist.displayName }}</a>' +
-            '</p>' +
+            '{{#artist.match}}' +
+              '<a class="artist_image" href="{{ artist.uri }}">' +
+                '<img class="placeholder" src="/img/artist_bg.png">' +
+              '</a>' +
+              '<a class="artist trucated_line" href="{{ artist.uri }}">{{ artist.displayName }}</a>' +
+            '{{/artist.match}}' +
           '{{/performance}}' +
-        '</td>' + 
-        '<td>' +
-          '<a href="{{ venue.uri }}">{{ venue.displayName }}</a>' +
-         '</td>' +
-        '<td> Buy Tickets </td>' +
-      '<tr>';
+          '<a class="venue truncated_line" href="{{ venue.uri }}">{{ venue.displayName }}</a>' +
+          '<span class="date">{{ start.date }}</span>' +
+      '</div>';
 
     function getArtists(start) {
         if (typeof(start) === 'undefined') start = 0;
@@ -36,7 +34,7 @@
 
                 for (var x = 0; x < response.result.length; x++) {
                     var artist = response.result[x].name;
-                    artists[artist] = true;
+                    artists[artist] = response.result[x];
                 }
 
                 if (response.result.length == batchCount) {
@@ -56,8 +54,8 @@
     function getEvents(page) {
         if (typeof(page) === 'undefined') {
             page = 1;
-        } else if (page > 5) {
-            return;
+        } else if (page > 30) {
+            return eventsLoaded();
         }
 
         var url =
@@ -73,16 +71,24 @@
             }
 
             var event = response.resultsPage.results.event;
+            if (!event) {
+                return eventsLoaded();
+            }
             for (var x = 0; x < event.length; x++) {
                 for (var y = 0; y < event[x].performance.length; y++) {
-                    var artist = event[x].performance[y].artist.displayName;
+                    var artist = event[x].performance[y].artist;
+                    var name = artist.displayName;
 
-                    if (artist in artists) {
+                    if (artists[name]) {
+                        artist.match = true;
+                        artist.rdioKey = artists[name].artistKey;
                         var row = $.mustache(eventTemplate, event[x]);
-                        $('#tbody').append(row);
+                        $('#events .event_grid').append(row);
 
-                        continue;
-                    };
+                        getArtistArt(artist, event[x]);
+
+                        break;
+                    }
                 }
             }
 
@@ -93,14 +99,37 @@
     function setAuthenticated(authenticated) {
         if (authenticated) {
             $('#unauthenticated').hide();
-            $('#authenticated').show();
+            $('#events').show();
+
+            getArtists();
         } else {
             $('#unauthenticated').show();
-            $('#authenticated').hide();
+            $('#events').hide();
         }
+    }
 
-        if (authenticated) {
-            getArtists();
+    function getArtistArt(artist, event) {
+
+        R.request({
+            method: "getAlbumsForArtist",
+            content: {
+                artist: artist.rdioKey,
+                start: 0,
+                count: 1,
+                sort: 'playCount'
+            },
+            success: function(response) {
+                var $event = $('#' + event.id);
+                var img = '<img class="loaded_image" src="' + response.result[0].icon + '">';
+                $event.find('.artist_image').append(img);
+            }
+        });
+    }
+
+    function eventsLoaded() {
+        var $events = $('#events');
+        if ($events.find('.event').length == 0) {
+            $events.append('<div class="no_results">No events found!</div>');
         }
     }
 

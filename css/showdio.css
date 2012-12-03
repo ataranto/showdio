@@ -6,6 +6,13 @@ body {
   width: 960px;
 }
 
+.truncated_line {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 #header {
   background: black url('/img/header.png') no-repeat top center;
   color: white;
@@ -26,15 +33,61 @@ body {
   line-height: 60px;
 }
 
-#authenticated {
-    display: none;
-}
-
 #unauthenticated {
-    padding-top: 100px;
-    text-align: center;
+  padding-top: 100px;
+  text-align: center;
 }
 
 #unauthenticated p {
-    padding-top: 45px;
+  padding-top: 45px;
+}
+
+#events {
+  display: none;
+  padding-top: 20px;
+}
+
+.event_grid .event {
+  display: block;
+  float: left;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  width: 220px;
+}
+
+.event_grid .event .artist_image,
+.event_grid .event .artist_image .placeholder {
+  width: 100%;
+}
+
+.event_grid .event .artist_image {
+  -webkit-box-shadow: 0px 1px 1px rgba(50, 50, 50, 0.3);
+  -moz-box-shadow:    0px 1px 1px rgba(50, 50, 50, 0.3);
+  box-shadow:         0px 1px 1px rgba(50, 50, 50, 0.3);
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  display: block;
+  position: relative;
+}
+
+.event_grid .event .artist_image .loaded_image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 4px;
+  width: 212px;
+}
+
+.event_grid .event .date,
+.event_grid .event .artist,
+.event_grid .event .venue {
+  color: #89949b;
+  display: block;
+  font-size: 14px;
+}
+
+.event_grid .event .artist {
+  color: #4b5c66;
+  font-size: 16px;
 }
