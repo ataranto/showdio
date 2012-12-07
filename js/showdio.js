@@ -1,5 +1,7 @@
 (function() {
     var artists = {};
+    var eventsPage = 1;
+    var eventsBatchSize = 8;
     var animationTimeout;
 
     var eventTemplate =
@@ -17,6 +19,8 @@
       '</div>';
 
     function getArtists(start) {
+        setLoading(true, 'Loading Artists');
+
         if (typeof(start) === 'undefined') start = 0;
         var batchCount = 100;
 
@@ -52,20 +56,14 @@
         });
     }
 
-    function getEvents(page) {
-        if (typeof(page) === 'undefined') {
-            page = 1;
-        } else if (page > 30) {
-            return eventsLoaded();
-        }
-
-        var isFirst = $('#events .event').length == 0;
+    function getEvents() {
+        setLoading(true, 'Loading Shows');
 
         var url =
             'http://api.songkick.com/api/3.0/events.json' +
             '?location=clientip' +
             '&apikey=G2KCF6q91g23Q6Zh' +
-            '&page=' + page +
+            '&page=' + eventsPage +
             '&jsoncallback=?';
         $.getJSON(url, function(response) {
             if (response.resultsPage.status != 'ok') {
@@ -82,18 +80,18 @@
                     var artist = event[x].performance[y].artist;
                     var name = artist.displayName;
 
-                    event[x].start.formattedDate = formatDate(event[x].start.date);
+                    event[x].start.formattedDate =
+                        formatDate(event[x].start.date);
+
+                    $('#loading').find('.date').
+                        html(event[x].start.formattedDate);
 
                     if (artists[name]) {
                         artist.match = true;
                         artist.rdioKey = artists[name].artistKey;
                         var row = $.mustache(eventTemplate, event[x]);
                         $('#events .event_grid').append(row);
-
-                        if (isFirst) {
-                            showLoading('lower_left', 'Loading more shows');
-                            isFirst = false;
-                        }
+                        $('#loading').addClass('lower_left');
 
                         getArtistArt(artist, event[x]);
 
@@ -102,7 +100,12 @@
                 }
             }
 
-            getEvents(response.resultsPage.page + 1);
+            eventsPage = response.resultsPage.page + 1;
+            if (eventsPage % eventsBatchSize != 0) {
+                getEvents();
+            } else {
+                setLoading(false, 'Done');
+            }
         });
     }
 
@@ -111,11 +114,40 @@
             $('#unauthenticated').hide();
             $('#events').show();
 
-            showLoading();
             getArtists();
         } else {
             $('#unauthenticated').show();
             $('#events').hide();
+        }
+    }
+
+    function setLoading(loading, message) {
+        var $loading = $('#loading');
+        var $button = $loading.find('.btn');
+
+        $loading.show();
+
+        if (loading) {
+            $button.hide();
+
+            if (!animationTimeout) {
+                var $dot = $loading.find('.dot');
+                animationTimeout = setInterval(function() {
+                    if ($dot.hasClass('fade')) {
+                        $dot.removeClass('fade');
+                    } else {
+                        $dot.addClass('fade');
+                    }
+                }, 2000);
+            }
+        } else {
+            $button.show();
+
+            clearInterval(animationTimeout);
+        }
+
+        if (message) {
+            $loading.find('.message').html(message);
         }
     }
 
@@ -125,33 +157,6 @@
         var day = parseInt(parts[2], 10);
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         return months[month-1] + ' ' + day;
-    }
-
-    function showLoading(extraClass, message) {
-        var $loading = $('#loading');
-        var $dot = $loading.find('.dot');
-        if (extraClass) {
-            $loading.addClass(extraClass);
-        }
-        if (message) {
-            $loading.find('.message').html(message);
-        }
-        if (!animationTimeout) {
-            animationTimeout = setInterval(function() {
-                console.log('checking');
-                if ($dot.hasClass('fade')) {
-                    $dot.removeClass('fade');
-                } else {
-                    $dot.addClass('fade');
-                }
-            }, 2000);
-        }
-        $loading.show();
-    }
-
-    function hideLoading() {
-        $('#loading').hide();
-        clearInterval(animationTimeout);
     }
 
     function getArtistArt(artist, event) {
@@ -174,17 +179,17 @@
     }
 
     function eventsLoaded() {
-        hideLoading();
-        var $events = $('#events');
-        if ($events.find('.event').length == 0) {
-            $events.append('<div class="no_results">No events found!</div>');
-        }
+        setLoading(false);
     }
 
     $('#authenticate_button').click(function() {
         R.authenticate(function(authenticated) {
             setAuthenticated(authenticated);
         });
+    });
+
+    $('#loading').find('.btn').click(function() {
+        getEvents();
     });
 
     $(document).ready(function() {
